@@ -1,4 +1,4 @@
-const API_KEY = "d489e079b88c4e6990a32e301e091e94 ";
+const API_KEY = "63937db6b90f498c8caf64fc2443f7c2 ";
 const generalBtn = document.getElementById("general");
 const businessBtn = document.getElementById("business");
 const sportsBtn = document.getElementById("sports"); // corrected ID
@@ -9,7 +9,7 @@ const newsSearch = document.getElementById("newsSearch");
 const newsType = document.getElementById("newsType");
 const newsdetails = document.getElementById("newsdetails");
 const HEADLINES_NEWS =
-  "https://newsapi.org/v2/top-headlines?country=us&language=en&apiKey=";
+  "https://newsapi.org/v2/top-headlines?country=us&apiKey=";
 const GENERAL_NEWS =
   "https://newsapi.org/v2/top-headlines?country=us&category=general&apiKey=";
 const BUSINESS_NEWS =
@@ -56,6 +56,16 @@ searchBtn.addEventListener("click", function () {
   newsType.innerHTML = `<h4>Search: ${newsSearch.value}</h4>`;
   fetchQueryNews(newsSearch.value);
 });
+newsSearch.addEventListener("keypress", function (event)
+{
+  if (event.key === 'Enter')
+  {
+    newsSearch.blur();
+    newsType.innerHTML = `<h4>Search: ${newsSearch.value}</h4>`;
+    fetchQueryNews(newsSearch.value);
+  }
+});
+
 
 const fetchHeadlines = async () => {
   const response = await fetch(HEADLINES_NEWS + API_KEY);
@@ -158,10 +168,14 @@ const fetchQueryNews = async (search_value) =>
 };
 function displayNews(newsDataArr) {
   newsdetails.innerHTML = "";
-  newsDataArr.forEach((news) => {
+  newsDataArr.forEach((news) =>
+  {
+    if (news.title == "[Removed]" || news.description == "[Removed]")
+      return;
     let date = news.publishedAt.split("T");
     let image = document.createElement("img");
     image.src = news.urlToImage || "./download.png";
+    image.alt = "./download.png";
 
     let containerOfArticle = document.createElement("div");
     containerOfArticle.className = "news-card";
@@ -190,6 +204,7 @@ function displayNews(newsDataArr) {
     
     containerOfArticle.appendChild(image);
     containerOfArticle.appendChild(cardContent);
+
 
     newsdetails.appendChild(containerOfArticle);
   });
