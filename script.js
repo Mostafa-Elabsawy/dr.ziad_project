@@ -1,13 +1,13 @@
 //API KEYS
 //c4af72f3416040cd99892cb6707aba8a
 //d489e079b88c4e6990a32e301e091e94
-// 63937db6b90f498c8caf64fc2443f7c2
+//63937db6b90f498c8caf64fc2443f7c2
 const API_KEY = "63937db6b90f498c8caf64fc2443f7c2 ";
 
 //elements in the html
 const generalBtn = document.getElementById("general");
 const businessBtn = document.getElementById("business");
-const sportsBtn = document.getElementById("sports"); // corrected ID
+const sportsBtn = document.getElementById("sports"); 
 const entertainmentBtn = document.getElementById("entertainment");
 const technologyBtn = document.getElementById("technology");
 const searchBtn = document.getElementById("searchButton");
