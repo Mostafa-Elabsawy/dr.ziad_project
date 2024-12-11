@@ -1,4 +1,10 @@
-const API_KEY = "c4af72f3416040cd99892cb6707aba8a ";
+//API KEYS
+//c4af72f3416040cd99892cb6707aba8a
+//d489e079b88c4e6990a32e301e091e94
+// 63937db6b90f498c8caf64fc2443f7c2
+const API_KEY = "63937db6b90f498c8caf64fc2443f7c2 ";
+
+//elements in the html
 const generalBtn = document.getElementById("general");
 const businessBtn = document.getElementById("business");
 const sportsBtn = document.getElementById("sports"); // corrected ID
@@ -9,14 +15,16 @@ const newsSearch = document.getElementById("newsSearch");
 const newsType = document.getElementById("newsType");
 const newsdetails = document.getElementById("newsdetails");
 
-const HEADLINES_NEWS =`https://newsapi.org/v2/top-headlines?country=us&apiKey=${API_KEY}`;
-const GENERAL_NEWS =`https://newsapi.org/v2/top-headlines?country=us&category=general&apiKey=${API_KEY}`;
-const BUSINESS_NEWS =`https://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=${API_KEY}`;
-const SPORTS_NEWS =`https://newsapi.org/v2/top-headlines?country=us&category=sports&apiKey=${API_KEY}`;
-const ENTERTAINMENT_NEWS =`https://newsapi.org/v2/top-headlines?country=us&category=entertainment&apiKey=${API_KEY}`;
-const TECHNOLOGY_NEWS =`https://newsapi.org/v2/top-headlines?country=us&category=technology&apiKey=${API_KEY}`;
+//API LINKS AND CATOGRYES
+const HEADLINES_NEWS = `https://newsapi.org/v2/top-headlines?country=us&apiKey=${API_KEY}`;
+const GENERAL_NEWS = `https://newsapi.org/v2/top-headlines?country=us&category=general&apiKey=${API_KEY}`;
+const BUSINESS_NEWS = `https://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=${API_KEY}`;
+const SPORTS_NEWS = `https://newsapi.org/v2/top-headlines?country=us&category=sports&apiKey=${API_KEY}`;
+const ENTERTAINMENT_NEWS = `https://newsapi.org/v2/top-headlines?country=us&category=entertainment&apiKey=${API_KEY}`;
+const TECHNOLOGY_NEWS = `https://newsapi.org/v2/top-headlines?country=us&category=technology&apiKey=${API_KEY}`;
 const SEARCH_NEWS = `https://newsapi.org/v2/everything?q=`;
 
+//EVENTS ON THE ELEMENTS  
 window.onload = function () {
   newsType.innerHTML = "<h4>Headlines</h4>";
   Fetch_API(HEADLINES_NEWS);
@@ -47,6 +55,7 @@ technologyBtn.addEventListener("click", function () {
   Fetch_API(TECHNOLOGY_NEWS);
 });
 
+//search events press('enter') and click on button
 searchBtn.addEventListener("click", function () {
   let QUERY = newsSearch.value;
   newsType.innerHTML = `<h4>Search: ${newsSearch.value}</h4>`;
@@ -60,17 +69,18 @@ newsSearch.addEventListener("keypress", function (event) {
     Fetch_API(`${SEARCH_NEWS}${QUERY}&apiKey=${API_KEY}`);
   }
 });
-const Fetch_API = async (catogry) =>
-{
+
+//Fetching API'S LINK
+const Fetch_API = async (catogry) => {
   newsType.scrollIntoView({ behavior: "smooth" });
-  let sorted = ["relevancy", "popularity", "publishedAt"];
-  let orderofsorting = `&sortby=${sorted[1]}`;
+  //let sorted = ["relevancy", "popularity", "publishedAt"];
+  //let orderofsorting = `&sortby=${sorted[1]}`;
   const response = await fetch(catogry);
-  console.log(catogry);
   let newsDataArr = [];
   if (response.ok) {
     const myJson = await response.json();
     newsDataArr = myJson.articles;
+    console.log(catogry);
   } else {
     console.log(response.status, response.statusText);
     newsdetails.innerHTML = "<h5>No data found.</h5>";
@@ -79,14 +89,20 @@ const Fetch_API = async (catogry) =>
   displayNews(newsDataArr);
 };
 
+//prepare ,filter and display data
 function displayNews(newsDataArr) {
   newsdetails.innerHTML = "";
   newsDataArr.forEach((news) => {
-    if (news.title == "[Removed]" || news.description == "[Removed]" ) return;
+    if (
+      news.title == "[Removed]" ||
+      news.description == "[Removed]" ||
+      news.urlToImage == null
+    )
+      return;
     let date = news.publishedAt.split("T")[0];
     newsdetails.innerHTML += `
     <div class="news-card">
-      <img src="${news.urlToImage ||"./download.png" }" alt="" />
+      <img src="${news.urlToImage || "./download.png"}" alt="" />
       <div class="card-content">
         <h5>${news.title}</h5>
         <p>${date}</p>
