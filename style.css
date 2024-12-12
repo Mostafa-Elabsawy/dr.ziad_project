@@ -7,7 +7,7 @@
 body {
   font-family: Arial, sans-serif;
   background-color: #ffffff;
-  padding-top: 50px ;
+  padding-top: 70px ;
 }
 
 nav {
@@ -78,7 +78,7 @@ nav {
   color: #1d1d1d;
   text-align: center;
   padding: 20px;
-  border-bottom: 2px solid #ffda00;
+  /* border-bottom: 2px solid #ffda00; */
 }
 
 .news-container {
@@ -152,4 +152,23 @@ nav {
 .news-card:hover {
   transform: translateY(-5px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+}
+.error
+{
+  display: none;
+  width: 100%;
+  height: 400px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.error .fa-circle-exclamation
+{
+  color:#ffda00;
+}
+.error p
+{
+  font-weight: 900;
+  font-size:40px ;
+  color:#ffda00;
 }

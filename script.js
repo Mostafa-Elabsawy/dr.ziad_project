@@ -2,9 +2,11 @@
 //c4af72f3416040cd99892cb6707aba8a
 //d489e079b88c4e6990a32e301e091e94
 //63937db6b90f498c8caf64fc2443f7c2
-const API_KEY = "63937db6b90f498c8caf64fc2443f7c2 ";
+const API_KEY = "63937db6b90f498c8caf64fc2443f7c2";
 
 //elements in the html
+const error = document.getElementById("error");
+const error_message = document.getElementById("error_message");
 const generalBtn = document.getElementById("general");
 const businessBtn = document.getElementById("business");
 const sportsBtn = document.getElementById("sports"); 
@@ -71,22 +73,31 @@ newsSearch.addEventListener("keypress", function (event) {
 });
 
 //Fetching API'S LINK
-const Fetch_API = async (catogry) => {
-  newsType.scrollIntoView({ behavior: "smooth" });
-  //let sorted = ["relevancy", "popularity", "publishedAt"];
-  //let orderofsorting = `&sortby=${sorted[1]}`;
-  const response = await fetch(catogry);
-  let newsDataArr = [];
-  if (response.ok) {
-    const myJson = await response.json();
-    newsDataArr = myJson.articles;
-    console.log(catogry);
-  } else {
-    console.log(response.status, response.statusText);
-    newsdetails.innerHTML = "<h5>No data found.</h5>";
-    return;
+const Fetch_API = async (category) => {
+  try {
+    newsType.scrollIntoView({ behavior: "smooth" });
+    // let sorted = ["relevancy", "popularity", "publishedAt"];
+    // let orderOfSorting = `&sortby=${sorted[1]}`;
+    const response = await fetch(category);
+    let newsDataArr = [];
+
+    if (response.ok) {
+      error.style.display = "none";
+      const myJson = await response.json();
+      newsDataArr = myJson.articles;
+      console.log(category);
+    } else {
+      console.log(response.status, response.statusText);
+      error.style.display = "flex";
+      error_message.innerHTML = "No Data Found";
+    }
+
+    displayNews(newsDataArr);
+  } catch (err) {
+    console.error("Error fetching data:", err);
+    error.style.display = "flex"; 
+    error_message.innerHTML = "Network Error";
   }
-  displayNews(newsDataArr);
 };
 
 //prepare ,filter and display data

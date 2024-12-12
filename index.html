@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Breaking News</title>
+    <link rel="stylesheet" href="css/all.min.css" />
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
@@ -24,9 +25,13 @@
       </div>
     </nav>
 
-    <div id="newsType"></div>
-    <div id="newsdetails" class="news-container" ></div>
-    
+    <div id="newsType" ></div>
+    <div class="error" id="error">
+      <i class="fa-solid fa-circle-exclamation fa-10x"></i>
+      <p id="error_message">No data Found</p>
+    </div>
+    <div id="newsdetails" class="news-container"></div>
+    <script src="js/all.min.js"></script>
     <script src="script.js"></script>
   </body>
 </html>
