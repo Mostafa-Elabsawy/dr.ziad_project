@@ -9,7 +9,7 @@ const error = document.getElementById("error");
 const error_message = document.getElementById("error_message");
 const generalBtn = document.getElementById("general");
 const businessBtn = document.getElementById("business");
-const sportsBtn = document.getElementById("sports"); 
+const sportsBtn = document.getElementById("sports");
 const entertainmentBtn = document.getElementById("entertainment");
 const technologyBtn = document.getElementById("technology");
 const searchBtn = document.getElementById("searchButton");
@@ -26,9 +26,9 @@ const ENTERTAINMENT_NEWS = `https://newsapi.org/v2/top-headlines?country=us&cate
 const TECHNOLOGY_NEWS = `https://newsapi.org/v2/top-headlines?country=us&category=technology&apiKey=${API_KEY}`;
 const SEARCH_NEWS = `https://newsapi.org/v2/everything?q=`;
 
-//EVENTS ON THE ELEMENTS  
+//EVENTS ON THE ELEMENTS
 window.onload = function () {
-  newsType.innerHTML = "<h4>Headlines</h4>";
+  newsType.innerHTML = "<h4>Headlines Trends</h4>";
   Fetch_API(HEADLINES_NEWS);
 };
 
@@ -75,52 +75,78 @@ newsSearch.addEventListener("keypress", function (event) {
 //Fetching API'S LINK
 const Fetch_API = async (category) => {
   try {
-    newsType.scrollIntoView({ behavior: "smooth" });
+    newsType.focus();
     // let sorted = ["relevancy", "popularity", "publishedAt"];
     // let orderOfSorting = `&sortby=${sorted[1]}`;
     const response = await fetch(category);
     let newsDataArr = [];
 
     if (response.ok) {
+      newsType.style.display = "block";
       error.style.display = "none";
       const myJson = await response.json();
       newsDataArr = myJson.articles;
+      if (newsDataArr.length == 0) {
+        newsdetails.innerHTML = "";
+        error.style.display = "flex";
+        newsType.style.display = "none"
+        error_message.innerHTML = `Invalid Search Word : "${newsSearch.value}"`;
+        return;
+      }
       console.log(category);
     } else {
       console.log(response.status, response.statusText);
       error.style.display = "flex";
+      newsType.style.display = "none";
       error_message.innerHTML = "No Data Found";
     }
 
     displayNews(newsDataArr);
   } catch (err) {
     console.error("Error fetching data:", err);
-    error.style.display = "flex"; 
+    newsType.style.display = "none";
+    error.style.display = "flex";
     error_message.innerHTML = "Network Error";
   }
 };
 
 //prepare ,filter and display data
-function displayNews(newsDataArr) {
-  newsdetails.innerHTML = "";
-  newsDataArr.forEach((news) => {
+async function displayNews(newsDataArr) {
+  newsdetails.innerHTML = ""; // Clear previous content
+  for (const news of newsDataArr) {
     if (
       news.title == "[Removed]" ||
       news.description == "[Removed]" ||
       news.urlToImage == null
     )
-      return;
+      continue; // Skip invalid data
+
     let date = news.publishedAt.split("T")[0];
-    newsdetails.innerHTML += `
-    <div class="news-card">
+
+    // Create the news card container
+    const newsCard = document.createElement("div");
+    newsCard.classList.add("news-card");
+    newsCard.innerHTML = `
       <img src="${news.urlToImage || "./download.png"}" alt="" />
       <div class="card-content">
         <h5>${news.title}</h5>
         <p>${date}</p>
         <p>${news.description || ""}</p>
-        <a href="${news.url}" target="${"_blank"}" class="">Read more</a>
+        <a href="${news.url}" target="_blank" class="">Read more</a>
       </div>
-    </div>
-      `;
-  });
-}
+    `;
+
+    // Add the news card to the news details section
+    newsdetails.appendChild(newsCard);
+
+    // Add the animation class after the card is appended
+    await sleep(400); // Delay 500ms before adding the next card
+    newsCard.classList.add("slide-in"); // Add the animation dynamically
+        newsCard.addEventListener("animationend", () => {
+          newsCard.classList.remove("slide-in");
+          newsCard.style.opacity = "1";
+        });
+  }
+}const sleep = (ms) => {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+};
